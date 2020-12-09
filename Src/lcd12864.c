@@ -3,12 +3,13 @@
  * @Author: Hades
  * @Date: 2020-12-02 13:08:23
  * @LastEditors: Hades
- * @LastEditTime: 2020-12-09 14:11:05
+ * @LastEditTime: 2020-12-09 17:45:28
  */
 
 #include "lcd12864.h"
 #include "stm32f1xx.h"
 #include "stm32f1xx_hal.h"
+
 
 /**
  * @description: 延时函数
@@ -73,7 +74,7 @@ void LcdWriteData(uchar data)
  */
 void SetOnOff(uchar onoff)
 {
-	if(onoff==1){
+	if(onoff==ON){
 		LcdWriteCmd(0x3f);	
 	}	
 	else{
@@ -124,22 +125,22 @@ void SelectStartLine(uchar startline)
 
 /**
  * @description: 选择左右屏函数
- * @param {*screen：0-选择左屏；1-选择右屏；2-选择两块屏}
+ * @param {*screen：LEFT-选择左屏；RIGHT-选择右屏；BOTH-选择两块屏}
  * @return {*}
  */
 void SelectScreen(uchar screen)
 {
 	switch(screen)
 	{
-		case 0:
+		case LEFT:
 			SET_CS1;HAL_Delay(5);		//开启左屏幕
 			RESET_CS2;HAL_Delay(5);		//关闭右屏幕
 			break;
-		case 1:
+		case RIGHT:
 			RESET_CS1;HAL_Delay(5);		//关闭左屏幕
 			SET_CS2;HAL_Delay(5);		//开启右屏幕
 			break;
-		case 2:
+		case BOTH:
 			SET_CS1;HAL_Delay(5);		//开启左屏幕
 			SET_CS2;HAL_Delay(5);		//开启右屏幕
 			break;
@@ -147,33 +148,9 @@ void SelectScreen(uchar screen)
 } 
 
 
-/**********************************
-显示一个英文字符
-**********************************/
-void Show_english(uchar line,uchar column,uchar *address)
-{
-	uchar i;
-	SelectPage(line);
-	SelectColum(column);
-	for(i=0;i<8;i++)
-	{
-		LcdWriteData(*address);
-		address++;	
-	}
-	
-	SelectPage(line+1);
-	SelectColum(column);
-	for(i=0;i<8;i++)
-	{
-		LcdWriteData(*address);
-		address++;	
-	}
-}
-
-
 /**
  * @description: 清屏函数
- * @param {*}
+ * @param {*screen：LEFT-左屏清屏；RIGHT-右屏清屏；BOTH-两块屏清屏}
  * @return {*}
  */
 void ClearScreen(uchar screen)
@@ -198,12 +175,12 @@ void ClearScreen(uchar screen)
  */
 void InitLcd()
 {
-	SetOnOff(0);			//显示关
-	ClearScreen(2);			//清屏
+	SetOnOff(OFF);			//显示关
+	ClearScreen(BOTH);		//清屏
 	SelectPage(0);			//页设置
 	SelectColum(0);			//列设置
-	SelectStartLine(0);		//设置起始页
-	SetOnOff(1);			//显示开
+	SelectStartLine(0);		//设置起始行
+	SetOnOff(ON);			//显示开
 }
 
 /**
@@ -233,17 +210,19 @@ void MX_GPIO_Init(void)
 
 
 /**
- * @description: 在colum这一列(默认第0行)开始显示一块width*height的数据
- * @param {*colum：在这一行开始显示
+ * @brief: 显示核心函数
+ * @note: 在line这一行、colum这一列显示一张图片(pic_width*pic_height)
+ * @param {*line：顶点像素所在行
+ * 			colum：顶点像素所在列
  * 			width：显示数据的宽度
  * 			height：显示数据的高度
  * 			address：储存显示数据的(uchar)数组地址指针}
  * @return {*}
  */
-void ShowInColum(uchar colum, uchar width, uchar height, uchar *address){
+void ShowInColum(uchar line, uchar colum, uchar width, uchar height, uchar *address){
 	int page = 0;
 	for(page = 0; page < height/8; page++){	//依次显示各页的内容
-		SelectPage(page);
+		SelectPage(line + page);
 		SelectColum(colum);
 		for (int i = 0; i < width; i++)
 		{
@@ -256,57 +235,53 @@ void ShowInColum(uchar colum, uchar width, uchar height, uchar *address){
 
 /**
  * @brief: 显示图片函数
- * @note: 以(x,y)为顶点，显示一张图片(pic_width*pic_height)
- * @param {*x:图片顶点的横坐标(从1到128-pic_width+2)
- * 			y:图片顶点的纵坐标(从1到64-pic_height+2)
+ * @note: 在line这一行、colum这一列显示一张图片(pic_width*pic_height)，共8行，128列
+ * @param {*line:图片顶点所在行，范围：[1,8-(pic_height/8)+1]
+ * 			colum:图片顶点所在列，范围：[1,128-pic_width+1]
  * 			pic_width：图片的像素宽度
  * 			pic_height：图片的像素高度(列行式采样，pic_height必然是8的整数倍)
  * 			picture：储存图片的(uchar)数组地址指针}
  * @return {*}
  */
-void LCDShowPicture(uchar x, uchar y, uchar pic_width, uchar pic_height, uchar *picture){
+void LCDShowPicture(uchar line, uchar colum, uchar pic_width, uchar pic_height, uchar *picture){
 	uchar left_width = 0, right_width = 0;	//左屏和右屏的显示内容宽度
 	uchar overlap_width = pic_width - 1;	//交叠的跨屏区域宽度
 
-	if (y >= (64-(pic_height-1)+1)){	//显示区域溢出
+	if (line>(8-(pic_height/8)+1) || line<1 || colum>128-pic_width+1 || colum<1){	//显示区域溢出
 		return;
 	}
-	SelectStartLine(y);		//起始行设到显示的顶点所在行
-
 	//只有左屏有显示
-	if(x >= 1 && x <= (64-overlap_width)){
-		RESET_CS1;SET_CS2;	//开左屏，关右屏
-		ShowInColum(x,pic_width,pic_height,picture);
+	if(colum >= 1 && colum <= (64-overlap_width)){
+		SelectScreen(LEFT);
+		ShowInColum(line,colum,pic_width,pic_height,picture);
 	}
-
 	//只有右屏有显示
-	else if(x >= 65 && x <= (128-overlap_width)){
-		SET_CS1;RESET_CS2;	//关左屏，开右屏
-		ShowInColum(x,pic_width,pic_height,picture);
+	else if(colum >= 65 && colum <= (128-overlap_width)){
+		SelectScreen(RIGHT);
+		ShowInColum(line,colum,pic_width,pic_height,picture);
 	}
-
 	//左右屏都有显示
-	else if(x >= (64-overlap_width+1) && x <= 64){
-		left_width = 63 - x + 1;
+	else if(colum >= (64-overlap_width+1) && colum <= 64){
+		left_width = 63 - colum + 1;
 		right_width = pic_width - left_width;
 		//左屏显示
-		RESET_CS1;SET_CS2;	//开左屏，关右屏
-		ShowInColum(x,left_width,pic_height,picture);
+		SelectScreen(LEFT);
+		ShowInColum(line,colum,left_width,pic_height,picture);
 		//右屏显示
-		SET_CS1;RESET_CS2;	//关左屏，开右屏
-		ShowInColum(x,right_width,pic_height,picture);
+		SelectScreen(RIGHT);
+		ShowInColum(line,colum,right_width,pic_height,picture);
 	}
 }
 
 /**
  * @brief: 显示英文字母
- * @note: 以(x,y)为顶点，显示一个英文字母(8*16)
- * @param {*x:英文字母顶点的横坐标(从1到128-pic_width+2)
- * 			y:英文字母顶点的纵坐标(从1到64-pic_height+2)
+ * @note: 在line这一行、colum这一列显示一个英文字母(8*16)
+ * @param {*line:英文字母顶点像素所在行，范围：[1,7]
+ * 			colum:英文字母顶点像素所在列，范围：[1,121]
  * 			english_word：储存英文字母的(uchar)数组地址指针}
  * @return {*}
  */
-void LCDShowEnglishWord(uchar x, uchar y, uchar *english_word){
+void LCDShowEnglishWord(uchar line, uchar colum, uchar *english_word){
 	uchar word_width = 8, word_height = 16;
-	LCDShowPicture(x,y,word_width,word_height,english_word);
+	LCDShowPicture(line,colum,word_width,word_height,english_word);
 }

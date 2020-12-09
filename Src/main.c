@@ -11,8 +11,9 @@ TIM_HandleTypeDef htim1;
 
 int main(void)
 {
-	uchar i,x,y;
+	uchar i,line,colum;
 	uchar *address ;
+	uchar en_word_width=8, en_word_height=16;
 	
 	HAL_Init();
 	SystemClock_Config();
@@ -21,34 +22,19 @@ int main(void)
 	while (1)
 	{ 
 		
-		x=0;				
-		y=8*4;			
-		address=hzk;		
+		line = 1;				
+		colum = 1;			
+		address = hzk;		
 		SetOnOff(1);		
 
-		for(i=0;i<13;i++)	
+		for(i=0;i<8;i++)	
 		{
-			SelectScreen(2);
-			LCDShowEnglishWord(x,y,address);
+			LCDShowEnglishWord(line,colum,address);
 			address += 16;
-			x += 8;
-			// if(i<8)				
-			// {
-			// 	SelectScreen(0); 						
-			// 	Show_english(line,colum,address);		
-			// 	address+=16;  							
-			// 	colum+=8;	  							
-			// }	
-			// else 	 					
-			// {		
-			// 	SelectScreen(1);
-			// 	Show_english(line,colum,address);
-			// 	address+=16;
-			// 	colum+=8;						
-			// }
+			colum += en_word_width;
 		}	
 		
-		for(i = 0;i < 50;i ++)  LcdDelay(30000);	//ÑÓÊ±
+		HAL_Delay(3000);	//ÑÓÊ±
 	}
 
 }

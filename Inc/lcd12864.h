@@ -3,13 +3,20 @@
  * @Author: Hades
  * @Date: 2020-12-02 13:10:45
  * @LastEditors: Hades
- * @LastEditTime: 2020-12-09 14:00:03
+ * @LastEditTime: 2020-12-09 16:12:20
  */
 
 #ifndef _LCD12864_H
 #define _LCD12864_H
 
 #include "main.h"
+
+#define ON 1
+#define OFF 0
+
+#define LEFT 0
+#define RIGHT 1
+#define BOTH 2
 
 #define     DATABUS     	GPIOB
 #define     DATA        	GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7
@@ -44,10 +51,9 @@ void SelectPage(uchar page);
 void SelectColum(uchar colum);
 void SelectStartLine(uchar startline);
 void SelectScreen(uchar screen);
-void Show_english(uchar line,uchar column,uchar *address);
 void ClearScreen(uchar screen);
 void InitLcd(void);
 void MX_GPIO_Init(void);
-void LCDShowEnglishWord(uchar x, uchar y, uchar *english_word);
+void LCDShowEnglishWord(uchar line, uchar colum, uchar *english_word);
 
 #endif
