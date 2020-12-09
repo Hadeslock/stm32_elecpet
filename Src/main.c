@@ -22,7 +22,7 @@ int main(void)
 	{ 
 		
 		x=0;				
-		y=8;			
+		y=8*4;			
 		address=hzk;		
 		SetOnOff(1);		
 
