@@ -273,7 +273,7 @@ void LCDShowEnglishWord(uchar line, uchar colum, uchar *english_word){
  * 			zh_word：储存中文字的(uchar)数组地址指针}
  * @return {*}
  */
-LCDShowZhWord(uchar line, uchar colum, uchar *zh_word){
+void LCDShowZhWord(uchar line, uchar colum, uchar *zh_word){
 	uchar word_width = 16, word_height = 16;
 	if(line>6 || colum>112){	//判断地址是否合法
 		return;
