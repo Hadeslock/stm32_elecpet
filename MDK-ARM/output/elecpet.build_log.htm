@@ -1,0 +1,105 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: μVision V5.27.0.0
+Copyright (C) 2018 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: ruanjian Microsoft, Microsoft, LIC=MPPLD-8ZJCY-QDQKD-8DVE5-T65JE-XSQH5
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.27.0.0
+Toolchain Path:  D:\Program Files (x86)\keil5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 6 (build 750)
+Assembler:       Armasm.exe V5.06 update 6 (build 750)
+Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
+Library Manager: ArmAr.exe V5.06 update 6 (build 750)
+Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
+CPU DLL:         SARMCM3.DLL V5.27.0.0
+Dialog DLL:      DARMCM.DLL
+Target DLL:      UL2CM3.DLL V1.162.7.0
+Dialog DLL:      TCM.DLL V1.36.1.0
+ 
+<h2>Project:</h2>
+D:\project\keil\elecpet\MDK-ARM\elecpet.uvprojx
+Project File Date:  12/09/2020
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\Program Files (x86)\keil5\ARM\ARMCC\Bin'
+Build target 'elecpet'
+assembling startup_stm32f103x6.s...
+compiling main.c...
+../Src/main.c(12): warning:  #177-D: variable "en_word_height"  was declared but never referenced
+  	uchar en_word_width=8, en_word_height=16;
+../Src/main.c(97): error:  #20: identifier "NVIC_InitTypeDef" is undefined
+  	NVIC_InitTypeDef NVIC_InitStruct ;
+../Src/main.c(100): warning:  #223-D: function "NVIC_PriorityGroupConfig" declared implicitly
+  	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1) ;
+../Src/main.c(100): error:  #20: identifier "NVIC_PriorityGroup_1" is undefined
+  	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1) ;
+../Src/main.c(104): error:  #20: identifier "KEY1_EXTI_IRQN" is undefined
+  	NVIC_InitStruct.NVIC_IRQChannel = KEY1_EXTI_IRQN ;
+../Src/main.c(112): warning:  #223-D: function "NVIC_Init" declared implicitly
+  	NVIC_Init(&NVIC_InitStruct) ;
+../Src/main.c(115): error:  #20: identifier "KEY2_EXTI_IRQN" is undefined
+  	NVIC_InitStruct.NVIC_IRQChannel = KEY2_EXTI_IRQN ;
+../Src/main.c(95): warning:  #177-D: function "NVIC_Config"  was declared but never referenced
+  static void NVIC_Config(void) /* 主要是配置中断源的优先级与打开使能中断通道 */
+../Src/main.c: 4 warnings, 4 errors
+compiling stm32f1xx_hal_gpio_ex.c...
+compiling stm32f1xx_hal_msp.c...
+compiling lcd12864.c...
+compiling stm32f1xx_hal_pwr.c...
+compiling system_stm32f1xx.c...
+compiling stm32f1xx_it.c...
+compiling stm32f1xx_hal.c...
+compiling stm32f1xx_hal_gpio.c...
+compiling stm32f1xx_hal_flash.c...
+compiling stm32f1xx_hal_cortex.c...
+compiling stm32f1xx_hal_tim_ex.c...
+compiling stm32f1xx_hal_dma.c...
+compiling stm32f1xx_hal_rcc.c...
+compiling misc.c...
+D:\Program Files (x86)\keil5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include\stm32f10x.h(8302): error:  #5: cannot open source input file "stm32f10x_conf.h": No such file or directory
+    #include "stm32f10x_conf.h"
+D:\Program Files (x86)\keil5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\src\misc.c: 0 warnings, 1 error
+compiling stm32f1xx_hal_flash_ex.c...
+compiling stm32f1xx_hal_rcc_ex.c...
+compiling stm32f1xx_hal_tim.c...
+".\output\elecpet.axf" - 5 Error(s), 4 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.4.0.pack
+                ARM.CMSIS.5.4.0
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.1.2
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F1xx_DFP.2.3.0.pack
+                Keil.STM32F1xx_DFP.2.3.0
+                STMicroelectronics STM32F1 Series Device Support, Drivers and Examples
+   * Component: Framework Version: 3.5.1
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_elecpet
+  D:\Program Files (x86)\keil5\ARM\PACK\ARM\CMSIS\5.4.0\CMSIS\Core\Include
+  D:\Program Files (x86)\keil5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\Include
+  D:\Program Files (x86)\keil5\ARM\PACK\Keil\STM32F1xx_DFP\2.3.0\Device\StdPeriph_Driver\inc
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.1.2
+
+   * Component: Keil::Device:StdPeriph Drivers:Framework:3.5.1
+      Source file:   Device\StdPeriph_Driver\templates\stm32f10x_conf.h
+      Source file:   Device\StdPeriph_Driver\src\misc.c
+      Source file:   Device\StdPeriph_Driver\templates\stm32f10x_it.c
+      Include file:  Device\StdPeriph_Driver\templates\stm32f10x_it.h
+      Include file:  Device\StdPeriph_Driver\inc\misc.h
+Target not created.
+Build Time Elapsed:  00:00:13
+</pre>
+</body>
+</html>

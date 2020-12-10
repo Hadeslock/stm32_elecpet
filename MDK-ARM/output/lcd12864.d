@@ -1,6 +1,5 @@
 .\output\lcd12864.o: ..\Src\lcd12864.c
 .\output\lcd12864.o: ../Inc/lcd12864.h
-.\output\lcd12864.o: ../Inc/main.h
 .\output\lcd12864.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h
 .\output\lcd12864.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103x6.h
 .\output\lcd12864.o: ../Drivers/CMSIS/Include/core_cm3.h
@@ -11,6 +10,7 @@
 .\output\lcd12864.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h
 .\output\lcd12864.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 .\output\lcd12864.o: ../Inc/stm32f1xx_hal_conf.h
+.\output\lcd12864.o: ../Inc/main.h
 .\output\lcd12864.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h
 .\output\lcd12864.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h
 .\output\lcd12864.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h

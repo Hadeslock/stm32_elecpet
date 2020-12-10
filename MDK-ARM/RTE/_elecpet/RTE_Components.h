@@ -4,7 +4,7 @@
  *      *** Do not modify ! ***
  *
  * Project: 'elecpet' 
- * Target:  'stm32f103test' 
+ * Target:  'elecpet' 
  */
 
 #ifndef RTE_COMPONENTS_H

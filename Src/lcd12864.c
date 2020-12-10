@@ -1,9 +1,9 @@
 /*
- * @Descripttion: 
+ * @Descripttion: lcd12864的显示函数库
  * @Author: Hades
  * @Date: 2020-12-02 13:08:23
  * @LastEditors: Hades
- * @LastEditTime: 2020-12-09 17:45:28
+ * @LastEditTime: 2020-12-10 17:43:30
  */
 
 #include "lcd12864.h"
@@ -183,31 +183,6 @@ void InitLcd()
 	SetOnOff(ON);			//显示开
 }
 
-/**
- * @description: GPIO端口配置
- */
-void MX_GPIO_Init(void)
-{
-	GPIO_InitTypeDef GPIO_InitStruct;
-
-	__HAL_RCC_GPIOA_CLK_ENABLE();
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-	__HAL_RCC_GPIOC_CLK_ENABLE();
-
-	//Init the data pin
-	GPIO_InitStruct.Pin = DATA;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-	//Init the control pin
-	GPIO_InitStruct.Pin = CS1|CS2|E|RW|DI;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-	
-}
-
 
 /**
  * @brief: 显示核心函数
@@ -236,8 +211,8 @@ void ShowInColum(uchar line, uchar colum, uchar width, uchar height, uchar *addr
 /**
  * @brief: 显示图片函数
  * @note: 在line这一行、colum这一列显示一张图片(pic_width*pic_height)，共8行，128列
- * @param {*line:图片顶点所在行，范围：[1,8-(pic_height/8)+1]
- * 			colum:图片顶点所在列，范围：[1,128-pic_width+1]
+ * @param {*line:图片顶点所在行，范围：[0,8-(pic_height/8)]
+ * 			colum:图片顶点所在列，范围：[0,128-pic_width]
  * 			pic_width：图片的像素宽度
  * 			pic_height：图片的像素高度(列行式采样，pic_height必然是8的整数倍)
  * 			picture：储存图片的(uchar)数组地址指针}
@@ -247,21 +222,21 @@ void LCDShowPicture(uchar line, uchar colum, uchar pic_width, uchar pic_height, 
 	uchar left_width = 0, right_width = 0;	//左屏和右屏的显示内容宽度
 	uchar overlap_width = pic_width - 1;	//交叠的跨屏区域宽度
 
-	if (line>(8-(pic_height/8)+1) || line<1 || colum>128-pic_width+1 || colum<1){	//显示区域溢出
+	if (line>(8-(pic_height/8)) || colum>128-pic_width){	//显示区域溢出
 		return;
 	}
 	//只有左屏有显示
-	if(colum >= 1 && colum <= (64-overlap_width)){
+	if(colum <= (63-overlap_width)){
 		SelectScreen(LEFT);
 		ShowInColum(line,colum,pic_width,pic_height,picture);
 	}
 	//只有右屏有显示
-	else if(colum >= 65 && colum <= (128-overlap_width)){
+	else if(colum >= 64 && colum <= (127-overlap_width)){
 		SelectScreen(RIGHT);
 		ShowInColum(line,colum,pic_width,pic_height,picture);
 	}
 	//左右屏都有显示
-	else if(colum >= (64-overlap_width+1) && colum <= 64){
+	else if(colum >= (63-overlap_width+1) && colum <= 63){
 		left_width = 63 - colum + 1;
 		right_width = pic_width - left_width;
 		//左屏显示
@@ -276,12 +251,32 @@ void LCDShowPicture(uchar line, uchar colum, uchar pic_width, uchar pic_height, 
 /**
  * @brief: 显示英文字母
  * @note: 在line这一行、colum这一列显示一个英文字母(8*16)
- * @param {*line:英文字母顶点像素所在行，范围：[1,7]
- * 			colum:英文字母顶点像素所在列，范围：[1,121]
+ * @param {*line:英文字母顶点像素所在行，范围：[0,6]
+ * 			colum:英文字母顶点像素所在列，范围：[0,120]
  * 			english_word：储存英文字母的(uchar)数组地址指针}
  * @return {*}
  */
 void LCDShowEnglishWord(uchar line, uchar colum, uchar *english_word){
 	uchar word_width = 8, word_height = 16;
+	if(line>6 || colum>120){	//判断地址是否合法
+		return;
+	}
 	LCDShowPicture(line,colum,word_width,word_height,english_word);
+}
+
+
+/**
+ * @brief: 显示中文字
+ * @note: 在line这一行、colum这一列显示一个中文字(16*16)
+ * @param {*line:中文字顶点像素所在行，范围：[0,6]
+ * 			colum:中文字顶点像素所在列，范围：[0,112]
+ * 			zh_word：储存中文字的(uchar)数组地址指针}
+ * @return {*}
+ */
+LCDShowZhWord(uchar line, uchar colum, uchar *zh_word){
+	uchar word_width = 16, word_height = 16;
+	if(line>6 || colum>112){	//判断地址是否合法
+		return;
+	}
+	LCDShowPicture(line,colum,word_width,word_height,zh_word);
 }

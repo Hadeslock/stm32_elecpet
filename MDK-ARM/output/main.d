@@ -28,3 +28,4 @@
 .\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
 .\output\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 .\output\main.o: ../Inc/word_lib.h
+.\output\main.o: ../Inc/graphic.h

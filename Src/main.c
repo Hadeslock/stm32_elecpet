@@ -1,13 +1,10 @@
 
 #include "main.h"
 #include "lcd12864.h"
+#include "stm32f1xx.h"
 #include "stm32f1xx_hal.h"
 #include "word_lib.h"
-//#include "stm32f1xx_hal_gpio.h"
-
-//static void MX_TIM1_Init(void);
-
-TIM_HandleTypeDef htim1;
+#include "graphic.h"
 
 int main(void)
 {
@@ -15,18 +12,19 @@ int main(void)
 	uchar *address ;
 	uchar en_word_width=8, en_word_height=16;
 	
-	HAL_Init();
-	SystemClock_Config();
-	MX_GPIO_Init();
+	HAL_Init();		//hal库初始化
+	SystemClock_Config();	//系统时钟初始化
+	MX_GPIO_Init();		//GPIO端口初始化
   
 	while (1)
 	{ 
 		
-		line = 1;				
-		colum = 1;			
+		line = 0;				
+		colum = 0;			
 		address = hzk;		
 		SetOnOff(1);		
 
+		//显示英文
 		for(i=0;i<8;i++)	
 		{
 			LCDShowEnglishWord(line,colum,address);
@@ -34,7 +32,14 @@ int main(void)
 			colum += en_word_width;
 		}	
 		
-		HAL_Delay(3000);	//延时
+		HAL_Delay(300);	//延时
+
+		//滚屏
+		for(i=0;i<=64;i++){
+			SelectStartLine(i);
+			HAL_Delay(50);
+		}
+//		LCDShowPicture(0,0,16,16,xiaoren);
 	}
 
 }
@@ -83,40 +88,29 @@ void SystemClock_Config(void)
 }
 
 /**
- * @description: 定时器初始化
- * @param {*}
- * @return {*}
+ * @description: GPIO端口配置
  */
-//static void MX_TIM1_Init(void)
-//{
-//	TIM_ClockConfigTypeDef sClockSourceConfig;
-//	TIM_MasterConfigTypeDef sMasterConfig;
+void MX_GPIO_Init(void)
+{
+	GPIO_InitTypeDef GPIO_InitStruct;
 
-//	htim1.Instance = TIM1;
-//	htim1.Init.Prescaler = 0;
-//	htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-//	htim1.Init.Period = 0;
-//	htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-//	htim1.Init.RepetitionCounter = 0;
-//	if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
-//	{
-//	Error_Handler();
-//	}
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+	__HAL_RCC_GPIOC_CLK_ENABLE();
 
-//	sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-//	if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
-//	{
-//	Error_Handler();
-//	}
+	//Init the data pin
+	GPIO_InitStruct.Pin = DATA;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-//	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-//	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-//	if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
-//	{
-//	Error_Handler();
-//	}
-
-//}
+	//Init the control pin
+	GPIO_InitStruct.Pin = CS1|CS2|E|RW|DI;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+	
+}
 
 
 void Error_Handler(void)

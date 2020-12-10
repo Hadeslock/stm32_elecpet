@@ -1,3 +1,12 @@
+/*
+ * @Description: 显示字库
+ * @Author: Hades
+ * @Date: 2020-12-02 13:23:38
+ * @LastEditors: Hades
+ * @LastEditTime: 2020-12-09 20:10:31
+ */
+
+
 #ifndef _WORD_LIB_H
 #define _WORD_LIB_H
 
@@ -23,5 +32,7 @@
 
 0x00,0x08,0x08,0xF8,0x08,0x08,0x00,0x00,0x00,0x20,0x20,0x3F,0x20,0x20,0x00,0x00,/*"I",7*/
 };
+
+
 
 #endif

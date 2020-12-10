@@ -1,12 +1,3 @@
-/*
- * @Descripttion: 
- * @version: 1.0
- * @Author: Hades
- * @Date: 2020-11-24 23:39:27
- * @LastEditors: Hades
- * @LastEditTime: 2020-12-02 13:41:00
- * @Modulation: no
- */
 /**
   ******************************************************************************
   * File Name          : main.h
@@ -46,15 +37,14 @@
 
 /* USER CODE BEGIN Includes */
 
+
+//#include "stm32f1xx_hal_gpio.h"
 /* USER CODE END Includes */
 
 /* Private define ------------------------------------------------------------*/
 
 #define uchar unsigned char
 #define uint unsigned int
-
-#define LED_Pin 						GPIO_PIN_13
-#define LED_GPIO_Port 			GPIOC
 
 /* USER CODE BEGIN Private defines */
 
