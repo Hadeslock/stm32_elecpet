@@ -3,8 +3,15 @@
 
 ## 工程架构重大更改
 引入STM32CubeMX进行代码初始化生成  
-注意代码只能写在*USER CODE BEGIN*和*USER CODE END*之间，参考下图  
+注意代码只能写在*USER CODE BEGIN*和*USER CODE END*之间，这是为了方便后续使用STM32CubeMX进行更改，更改时会保留以下代码：  
+1.*USER CODE BEGIN*和*USER CODE END*之间的代码  
+2.自己新建的文件中的代码  
+main.c中的注释的解释参考下图  
 ![注释](README/main.png)
+
+## 代码编写注意事项
+注意代码只能写在*USER CODE BEGIN*和*USER CODE END*之间  
+其他地方都可以不动，主函数写在main.c里面，中断相应相关的函数写在key_exit.c里面，框架已经写好了
 
 #### 文件结构
 + elecpet.pdsprj：proteus工程
