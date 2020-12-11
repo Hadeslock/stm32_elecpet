@@ -2,9 +2,9 @@
  An elecpet project based on stm32f103r6
 
 ## 工程架构重大更改
-引入STM32CubeMX进行代码初始化生成
-注意代码只能写在*USER CODE BEGIN*和*USER CODE END*之间，参考下图
-![注释](.\README\main.png)
+引入STM32CubeMX进行代码初始化生成  
+注意代码只能写在*USER CODE BEGIN*和*USER CODE END*之间，参考下图  
+![注释](README/main.png)
 
 #### 文件结构
 + elecpet.pdsprj：proteus工程
