@@ -27,5 +27,4 @@
 .\objects\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 .\objects\main.o: ../Core/Inc/lcd12864.h
 .\objects\main.o: ../Core/Inc/word_lib.h
-.\objects\main.o: ../Core/Inc/graphic.h
 .\objects\main.o: ../Core/Inc/key_exit.h

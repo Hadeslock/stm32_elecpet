@@ -24,7 +24,6 @@
 /* USER CODE BEGIN Includes */
 #include "lcd12864.h"
 #include "word_lib.h"
-#include "graphic.h"
 #include "key_exit.h"
 /* USER CODE END Includes */
 
@@ -45,7 +44,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+uchar page=0, line=0, colum=0;
+u32 preMs=0;
 
+extern uchar xiaoren[];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -77,9 +79,8 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  uchar i,line,colum;
-	uchar *address ;
-	uchar en_word_width=8, en_word_height=16;
+	uchar initPage=0, initColum=0;
+	uchar prePage=0, preColum=0, preLine=0;
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -95,7 +96,8 @@ int main(void)
   /* Initialize interrupts */
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
-
+	prePage = initPage; preColum = initColum;
+	LCDShowPicture(initPage,initColum,16,16,xiaoren);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -105,30 +107,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    line = 0;				
-		colum = 0;			
-		address = hzk;		
-		SetOnOff(1);		
-
-		//显示英文字母
-		for(i=0;i<8;i++)	
-		{
-			LCDShowEnglishWord(line,colum,address);
-			address += 16;
-			colum += en_word_width;
-		}	
-		
-		HAL_Delay(50);	//延时
-
-		//滚屏
-		for(i=0;i<=64;i++){
-			SelectStartLine(i);
-			HAL_Delay(5);
+		if(page!=prePage || colum!=preColum || line!=preLine){
+			SelectStartLine(line);
+			LCDShowPicture(page,colum,16,16,xiaoren);
 		}
-    //显示图片
-    ClearScreen(BOTH);
-		LCDShowPicture(0,0,16,16,xiaoren);
-    HAL_Delay(30);
   }
   /* USER CODE END 3 */
 }

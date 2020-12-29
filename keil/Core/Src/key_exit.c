@@ -8,6 +8,8 @@
 
 #include "key_exit.h"
 
+extern uchar line, colum;
+
 /**
   * @brief  按键中断回调函数
   * @param  GPIO_Pin: Specifies the pins connected EXTI line
@@ -21,19 +23,23 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   }
   else if (GPIO_Pin == KEY2_Pin)
   {
-    /* code */
+    HAL_Delay(10);
+		colum++;
   }
   else if (GPIO_Pin == KEY3_Pin)
   {
-    /* code */
+    HAL_Delay(10);
+		colum--;
   }
   else if (GPIO_Pin == KEY4_Pin)
   {
-    /* code */
+    HAL_Delay(10);
+		line++;
   }
   else if (GPIO_Pin == KEY5_Pin)
   {
-    /* code */
+    HAL_Delay(10);
+		line--;
   }
   
 }

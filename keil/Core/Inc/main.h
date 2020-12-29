@@ -103,6 +103,7 @@ void Error_Handler(void);
 
 #define uchar unsigned char
 #define uint unsigned int
+#define u32 uint32_t
 
 /* USER CODE END Private defines */
 

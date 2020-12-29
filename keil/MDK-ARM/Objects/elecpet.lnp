@@ -5,6 +5,7 @@
 ".\objects\stm32f1xx_hal_msp.o"
 ".\objects\lcd12864.o"
 ".\objects\key_exit.o"
+".\objects\graphic.o"
 ".\objects\stm32f1xx_hal_gpio_ex.o"
 ".\objects\stm32f1xx_hal_tim.o"
 ".\objects\stm32f1xx_hal_tim_ex.o"

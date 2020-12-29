@@ -417,6 +417,11 @@
               <FileType>1</FileType>
               <FilePath>..\Core\Src\key_exit.c</FilePath>
             </File>
+            <File>
+              <FileName>graphic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\graphic.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
